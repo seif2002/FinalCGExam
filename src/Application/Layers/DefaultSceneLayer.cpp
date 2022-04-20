@@ -49,6 +49,7 @@
 #include "Gameplay/Components/MaterialSwapBehaviour.h"
 #include "Gameplay/Components/TriggerVolumeEnterBehaviour.h"
 #include "Gameplay/Components/SimpleCameraControl.h"
+#include "Gameplay/Components/PlayerController.h"
 
 // Physics
 #include "Gameplay/Physics/RigidBody.h"
@@ -354,8 +355,9 @@ void DefaultSceneLayer::_CreateScene()
 		// Set up the scene's camera
 		GameObject::Sptr camera = scene->MainCamera->GetGameObject()->SelfRef();
 		{
-			camera->SetPostion({ -3, -1, 5 });
-			camera->LookAt(glm::vec3(0.0f));
+			camera->SetPostion({ -5, 0, 2 });
+			camera->LookAt(glm::vec3(0.0f, 0.0f, 2.0f));
+			scene->MainCamera->SetFovDegrees(70.0f);
 
 			camera->Add<SimpleCameraControl>();
 
@@ -382,6 +384,27 @@ void DefaultSceneLayer::_CreateScene()
 			// Attach a plane collider that extends infinitely along the X/Y axis
 			RigidBody::Sptr physics = plane->Add<RigidBody>(/*static by default*/);
 			physics->AddCollider(BoxCollider::Create(glm::vec3(50.0f, 50.0f, 1.0f)))->SetPosition({ 0,0,-1 });
+		}
+
+		// Player object
+		GameObject::Sptr player = scene->CreateGameObject("Player");
+		{
+			MeshResource::Sptr box = ResourceManager::CreateAsset<MeshResource>();
+			box->AddParam(MeshBuilderParam::CreateCube(glm::vec3(0, 0, 0.1f), ONE));
+			box->GenerateMesh();
+
+			// Set and rotation position in the scene
+			player->SetPostion(glm::vec3(0.0f, 0.0f, 1.0f));
+
+			// Add a render component
+			RenderComponent::Sptr renderer = player->Add<RenderComponent>();
+			renderer->SetMesh(box);
+			renderer->SetMaterial(boxMaterial);
+
+			RigidBody::Sptr playerHitbox = player->Add<RigidBody>(RigidBodyType::Dynamic);
+			playerHitbox->AddCollider(BoxCollider::Create(glm::vec3(1.0f, 1.0f, 1.0f)))->SetPosition({ 0,0,0.5 });
+
+			PlayerController::Sptr playerController = player->Add<PlayerController>();
 		}
 
 		// Add some walls :3
