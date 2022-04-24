@@ -360,7 +360,7 @@ void DefaultSceneLayer::_CreateScene()
 			camera->LookAt(glm::vec3(0.0f, 0.0f, 2.0f));
 			scene->MainCamera->SetFovDegrees(70.0f);
 
-			camera->Add<SimpleCameraControl>();
+			
 			DebugKeyHandler::Sptr handler = camera->Add<DebugKeyHandler>();
 			// This is now handled by scene itself!
 			//Camera::Sptr cam = camera->Add<Camera>();
@@ -373,9 +373,10 @@ void DefaultSceneLayer::_CreateScene()
 			MeshResource::Sptr box = ResourceManager::CreateAsset<MeshResource>();
 			box->AddParam(MeshBuilderParam::CreateCube(glm::vec3(0, 0, 0.1f), ONE));
 			box->GenerateMesh();
-
+			 
 			// Set and rotation position in the scene
 			player->SetPostion(glm::vec3(0.0f, 0.0f, 1.0f));
+			player->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
 
 			// Add a render component
 			RenderComponent::Sptr renderer = player->Add<RenderComponent>();
@@ -383,11 +384,11 @@ void DefaultSceneLayer::_CreateScene()
 			renderer->SetMaterial(boxMaterial);
 
 			RigidBody::Sptr playerHitbox = player->Add<RigidBody>(RigidBodyType::Dynamic);
-			playerHitbox->AddCollider(BoxCollider::Create(glm::vec3(0.5f, 0.5f, 0.5f)))->SetPosition({ 0,0,0.110 });
+			playerHitbox->AddCollider(BoxCollider::Create(glm::vec3(0.25f, 0.25f, 0.25f)))->SetPosition({ 0,0,0.110 });
 
 			PlayerController::Sptr playerController = player->Add<PlayerController>();
 		}
-
+		 
 		// Set up all our sample objects
 		GameObject::Sptr plane = scene->CreateGameObject("Plane");
 		{
@@ -407,7 +408,8 @@ void DefaultSceneLayer::_CreateScene()
 
 			TriggerVolume::Sptr trigger = plane->Add<TriggerVolume>();
 			BoxCollider::Sptr collider = BoxCollider::Create(glm::vec3(0.5f));
-			collider->SetPosition(glm::vec3(0.0f, 0.0f, 0.11f));
+			collider->SetPosition(glm::vec3(0.0f, 0.0f, 0.10f));
+			collider->SetScale(glm::vec3(1.0f, 15.0f, 1.0f));
 			trigger->AddCollider(collider);
 
 			TriggerVolumeEnterBehaviour::Sptr volume = plane->Add<TriggerVolumeEnterBehaviour>();
@@ -426,14 +428,41 @@ void DefaultSceneLayer::_CreateScene()
 
 			GameObject::Sptr wall1 = scene->CreateGameObject("Wall1");
 			wall1->Add<RenderComponent>()->SetMesh(wall)->SetMaterial(whiteBrick);
-			wall1->SetScale(glm::vec3(20.0f, 1.0f, 3.0f));
-			wall1->SetPostion(glm::vec3(0.0f, 10.0f, 1.5f));
+			wall1->SetScale(glm::vec3(2.0f, 2.0f, 0.5f));
+			wall1->SetPostion(glm::vec3(0.0f, 4.5f, 1.5f));
+			
+			RigidBody::Sptr physics1 = wall1->Add<RigidBody>(/*static by default*/);
+			physics1->AddCollider(BoxCollider::Create(glm::vec3(1.0f, 1.0f, 0.25f)))->SetPosition({ 0,0,0});
+			
+			TriggerVolume::Sptr trigger1 = wall1->Add<TriggerVolume>();
+			BoxCollider::Sptr collider1 = BoxCollider::Create(glm::vec3(0.5f));
+			collider1->SetPosition(glm::vec3(0.0f, 0.0f, 0.15f));
+			collider1->SetScale(glm::vec3(2.0f, 2.0f, 0.2f));
+			trigger1->AddCollider(collider1);
+
+			TriggerVolumeEnterBehaviour::Sptr volume1 = wall1->Add<TriggerVolumeEnterBehaviour>();
+			volume1->playerController = player->Get<PlayerController>();
+			
 			plane->AddChild(wall1);
+
 
 			GameObject::Sptr wall2 = scene->CreateGameObject("Wall2");
 			wall2->Add<RenderComponent>()->SetMesh(wall)->SetMaterial(whiteBrick);
-			wall2->SetScale(glm::vec3(20.0f, 1.0f, 3.0f));
-			wall2->SetPostion(glm::vec3(0.0f, -10.0f, 1.5f));
+			wall2->SetScale(glm::vec3(2.0f, 2.0f, 0.5f));
+			wall2->SetPostion(glm::vec3(0.0f, -4.5f, 1.5f));
+
+			RigidBody::Sptr physics2 = wall2->Add<RigidBody>(/*static by default*/);
+			physics2->AddCollider(BoxCollider::Create(glm::vec3(1.0f, 1.0f, 0.25f)))->SetPosition({ 0,0,0 });
+			
+			TriggerVolume::Sptr trigger2 = wall2->Add<TriggerVolume>();
+			BoxCollider::Sptr collider2 = BoxCollider::Create(glm::vec3(0.5f));
+			collider2->SetPosition(glm::vec3(0.0f, 0.0f, 0.15f));
+			collider2->SetScale(glm::vec3(2.0f, 2.0f, 0.2f));
+			trigger2->AddCollider(collider2);
+
+			TriggerVolumeEnterBehaviour::Sptr volume2 = wall2->Add<TriggerVolumeEnterBehaviour>();
+			volume2->playerController = player->Get<PlayerController>();
+			
 			plane->AddChild(wall2);
 
 			GameObject::Sptr wall3 = scene->CreateGameObject("Wall3");
@@ -448,27 +477,6 @@ void DefaultSceneLayer::_CreateScene()
 			wall4->SetPostion(glm::vec3(-10.0f, 0.0f, 1.5f));
 			plane->AddChild(wall4);
 		}
-
-		//GameObject::Sptr monkey1 = scene->CreateGameObject("Monkey 1");
-		//{
-		//	// Set position in the scene
-		//	monkey1->SetPostion(glm::vec3(1.5f, 0.0f, 1.0f));
-
-		//	// Add some behaviour that relies on the physics body
-		//	monkey1->Add<JumpBehaviour>();
-
-		//	// Create and attach a renderer for the monkey
-		//	RenderComponent::Sptr renderer = monkey1->Add<RenderComponent>();
-		//	renderer->SetMesh(monkeyMesh);
-		//	renderer->SetMaterial(monkeyMaterial);
-
-		//	// Example of a trigger that interacts with static and kinematic bodies as well as dynamic bodies
-		//	TriggerVolume::Sptr trigger = monkey1->Add<TriggerVolume>();
-		//	trigger->SetFlags(TriggerTypeFlags::Statics | TriggerTypeFlags::Kinematics);
-		//	trigger->AddCollider(BoxCollider::Create(glm::vec3(1.0f)));
-
-		//	monkey1->Add<TriggerVolumeEnterBehaviour>();
-		//}
 
 		GameObject::Sptr ship = scene->CreateGameObject("Fenrir");
 		{
@@ -542,7 +550,7 @@ void DefaultSceneLayer::_CreateScene()
 		
 		
 
-		GameObject::Sptr particles = scene->CreateGameObject("Particles"); 
+		/*GameObject::Sptr particles = scene->CreateGameObject("Particles"); 
 		{
 			particles->SetPostion({ -2.0f, 0.0f, 2.0f });
 
@@ -562,7 +570,7 @@ void DefaultSceneLayer::_CreateScene()
 			emitter.SphereEmitterData.SizeRange = { 0.5f, 1.5f };
 
 			particleManager->AddEmitter(emitter);
-		}
+		}*/
 
 		GuiBatcher::SetDefaultTexture(ResourceManager::CreateAsset<Texture2D>("textures/ui-sprite.png"));
 		GuiBatcher::SetDefaultBorderRadius(8);

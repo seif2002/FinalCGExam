@@ -47,6 +47,10 @@ void PlayerController::Update(float deltaTime) {
 
 	_body->ApplyForce(gravity);
 	GetGameObject()->SetRotation(glm::vec3(0.0f,0.0f,0.0f));
+	if (GetGameObject()->GetPosition().x != 0.0f)
+	{
+		GetGameObject()->SetPostion(glm::vec3(0, GetGameObject()->GetPosition().y, GetGameObject()->GetPosition().z));
+	}
 	glm::vec3 currentVelocity = _body->GetLinearVelocity();
 
 
@@ -78,5 +82,9 @@ void PlayerController::Update(float deltaTime) {
 		if (ptr != nullptr) {
 			ptr->IsEnabled = !ptr->IsEnabled;
 		}
+	}
+	//character reset (just in case ;D)
+	if (InputEngine::GetKeyState(GLFW_KEY_R) == ButtonState::Down) {
+		GetGameObject()->SetPostion(glm::vec3(0, 0, 1));
 	}
 }
