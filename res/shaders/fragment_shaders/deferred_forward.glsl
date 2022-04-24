@@ -12,11 +12,14 @@ layout(location = 3) out vec3 view_pos;
 // For instance, you can think of this like material settings in 
 // Unity
 struct Material {
-	sampler2D AlbedoMap;
-	sampler2D EmissiveMap;
-	sampler2D NormalMap;
-	sampler2D MetallicShininessMap;
-	float     DiscardThreshold;
+	sampler2D	AlbedoMap;
+	sampler2D	EmissiveMap;
+	sampler2D	NormalMap;
+	sampler2D	MetallicShininessMap;
+	float		DiscardThreshold;
+	float		Diffuse;
+	float		Ambient;
+	float		Specular;
 };
 // Create a uniform for the material
 uniform Material u_Material;

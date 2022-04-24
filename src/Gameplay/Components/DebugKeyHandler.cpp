@@ -29,12 +29,12 @@ void DebugKeyHandler::Update(float deltaTime) {
 	{
 		if (diffuse)
 		{
-			
+			_renderer->GetMaterial()->Set("diffuse", false);
 			diffuse = false;
 		}
 		else
 		{
-			
+			_renderer->GetMaterial()->Set("diffuse", true);
 			diffuse = true;
 		}
 	}
@@ -113,7 +113,9 @@ void DebugKeyHandler::Update(float deltaTime) {
 	//	Reset Key
 	if (InputEngine::GetKeyState(GLFW_KEY_R) == ButtonState::Pressed)
 	{
-		
+		ambient = true;
+		diffuse = true;
+		specular = true;
 	}
 }
 
