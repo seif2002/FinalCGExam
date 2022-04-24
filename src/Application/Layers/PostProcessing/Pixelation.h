@@ -19,7 +19,7 @@ public:
 protected:
 	ShaderProgram::Sptr _shader;
 
-	float _scale = 5.0f;
+	float _scale = 40.0f;
 
 	float _amount = 850.f;
 };

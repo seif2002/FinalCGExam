@@ -69,10 +69,11 @@ void PostProcessingLayer::OnAppLoad(const nlohmann::json & config)
 	PostProcessingLayer::Sptr& postProcess = Application::Get().GetLayer<PostProcessingLayer>();
 	postProcess->GetEffect<Pixelation>()->Enabled = false;
 	postProcess->GetEffect<ColorCorrectionEffect>()->Enabled = false;
-	postProcess->GetEffect<Filmgrain>()->Enabled = false;
+	postProcess->GetEffect<Filmgrain>()->Enabled = true;
 	postProcess->GetEffect<Toonshading>()->Enabled = false;
 	postProcess->GetEffect<Nightvision>()->Enabled = false;
 	postProcess->GetEffect<OutlineEffect>()->Enabled = false;
+	postProcess->GetEffect<DepthOfField>()->Enabled = false;
 
 	_quadVAO = VertexArrayObject::Create();
 	_quadVAO->AddVertexBuffer(vbo, {

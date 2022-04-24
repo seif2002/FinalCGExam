@@ -495,7 +495,7 @@ void DefaultSceneLayer::_CreateScene()
 			SphereCollider::Sptr collider = SphereCollider::Create(0.5f);
 			collider->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 			trigger->AddCollider(collider);
-
+			 
 			SphereCollider::Sptr collider2 = SphereCollider::Create(0.45f);
 			collider2->SetPosition(glm::vec3(0.0f, 0.0f, -3));
 			trigger->AddCollider(collider2);
