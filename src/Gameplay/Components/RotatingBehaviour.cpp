@@ -16,9 +16,17 @@ void RotatingBehaviour::Update(float deltaTime) {
 	}
 }
 
+void RotatingBehaviour::OnTriggerVolumeEntered(const std::shared_ptr<Gameplay::Physics::RigidBody>& body)
+{
+		postProcess->GetEffect<Pixelation>()->Enabled = true;
+		state = true;
+}
+
 void RotatingBehaviour::RenderImGui() {
 	LABEL_LEFT(ImGui::DragFloat3, "Speed", &RotationSpeed.x);
 }
+
+
 
 nlohmann::json RotatingBehaviour::ToJson() const {
 	return {

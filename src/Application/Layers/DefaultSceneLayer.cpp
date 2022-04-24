@@ -490,6 +490,15 @@ void DefaultSceneLayer::_CreateScene()
 			RotatingBehaviour::Sptr move = egg->Add<RotatingBehaviour>();
 			move->RotationSpeed = glm::vec3(0, 0, 180);
 			move->MoveSpeed = glm::vec3(0, 1, 0);
+
+			TriggerVolume::Sptr trigger = egg->Add<TriggerVolume>();
+			SphereCollider::Sptr collider = SphereCollider::Create(0.5f);
+			collider->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+			trigger->AddCollider(collider);
+
+			SphereCollider::Sptr collider2 = SphereCollider::Create(0.45f);
+			collider2->SetPosition(glm::vec3(0.0f, 0.0f, -3));
+			trigger->AddCollider(collider2);
 		}
 
 		GameObject::Sptr ball = scene->CreateGameObject("Ball");
