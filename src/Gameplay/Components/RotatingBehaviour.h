@@ -10,6 +10,7 @@ public:
 
 	RotatingBehaviour() = default;
 	glm::vec3 RotationSpeed;
+	glm::vec3 MoveSpeed;
 
 	virtual void Update(float deltaTime) override;
 

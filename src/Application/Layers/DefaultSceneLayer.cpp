@@ -375,7 +375,7 @@ void DefaultSceneLayer::_CreateScene()
 			box->GenerateMesh();
 			 
 			// Set and rotation position in the scene
-			player->SetPostion(glm::vec3(0.0f, 0.0f, 1.0f));
+			player->SetPostion(glm::vec3(0.0f, 4.5f, 2.5f));
 			player->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
 
 			// Add a render component
@@ -477,6 +477,34 @@ void DefaultSceneLayer::_CreateScene()
 			wall4->SetPostion(glm::vec3(-10.0f, 0.0f, 1.5f));
 			plane->AddChild(wall4);
 		}
+
+		GameObject::Sptr egg = scene->CreateGameObject("Egg");
+		{
+			egg->SetPostion(glm::vec3(0, 0, 4));
+			egg->SetScale(glm::vec3(0.5f));
+			 
+			RenderComponent::Sptr renderer = egg->Add<RenderComponent>();
+			renderer->SetMesh(sphere);
+			renderer->SetMaterial(grey);
+
+			RotatingBehaviour::Sptr move = egg->Add<RotatingBehaviour>();
+			move->RotationSpeed = glm::vec3(0, 0, 180);
+			move->MoveSpeed = glm::vec3(0, 1, 0);
+		}
+
+		GameObject::Sptr ball = scene->CreateGameObject("Ball");
+		{
+			ball->SetPostion(glm::vec3(0, 0, -6));
+			ball->SetScale(glm::vec3(0.9f));
+
+			RenderComponent::Sptr renderer = ball ->Add<RenderComponent>();
+			renderer->SetMesh(sphere);
+			renderer->SetMaterial(grey);
+
+			egg->AddChild(ball);
+		}
+
+
 
 		GameObject::Sptr ship = scene->CreateGameObject("Fenrir");
 		{

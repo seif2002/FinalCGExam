@@ -7,6 +7,13 @@
 
 void RotatingBehaviour::Update(float deltaTime) {
 	GetGameObject()->SetRotation(GetGameObject()->GetRotationEuler() + RotationSpeed * deltaTime);
+
+	GetGameObject()->SetPostion(GetGameObject()->GetPosition() + MoveSpeed * deltaTime);
+
+	if (GetGameObject()->GetPosition().y > 2.5 || GetGameObject()->GetPosition().y < -2.5)
+	{
+		MoveSpeed *= -1;
+	}
 }
 
 void RotatingBehaviour::RenderImGui() {

@@ -85,6 +85,6 @@ void PlayerController::Update(float deltaTime) {
 	}
 	//character reset (just in case ;D)
 	if (InputEngine::GetKeyState(GLFW_KEY_R) == ButtonState::Down) {
-		GetGameObject()->SetPostion(glm::vec3(0, 0, 1));
+		GetGameObject()->SetPostion(glm::vec3(0, 4.5, 2.5));
 	}
 }
