@@ -38,81 +38,41 @@ void main() {
     vec3 specular = texture(s_SpecularAccumulation, inUV).rgb;
     vec4 emissive = texture(s_Emissive, inUV);
 
-    vec3 ambient = s_Ambient;
+    vec3 ambient = vec3(0.3, 0.3, 0.3);
     
     int lightCheck = 0;
     
     float colorAdjust = 1;
 
-    if(IsFlagSet(FLAG_ENABLE_LIGHTING_AMBIENT_ONLY))
+    if(IsFlagSet(FLAG_DISABLE_AMBIENT_LIGHTING))
     {
-        
-             
-           specular *= 0;
-           diffuse *=  0;
+            ambient *= 0;
 
-           //check if no light elements are on
-           lightCheck = 0;
-           colorAdjust = 1;
+            //check if no light elements are on
+            lightCheck = 0;
+            colorAdjust = 1;
            
     }
 
-    if(IsFlagSet(FLAG_ENABLE_LIGHTING_SPECULAR_ONLY))
+    if(!IsFlagSet(FLAG_DISABLE_DIFFUSE_LIGHTING))
     {
-        
-             
-           ambient *= 0;
-           //diffuse *=  0;
+            diffuse *=  0;
 
-           //check if no light elements are on
-           lightCheck = 0;
-           colorAdjust = 1;
+            //check if no light elements are on
+            lightCheck = 0;
+            colorAdjust = 1;
            
     }
 
 
-    if(IsFlagSet(FLAG_ENABLE_LIGHTING_AMBIENT_AND_SPECULAR))
+    if(!IsFlagSet(FLAG_DISABLE_SPECULAR_LIGHTING))
     {
-        
-             
-          
-           //this is just normal :)
+            specular *= 0;
 
-           //check if no light elements are on
-           lightCheck = 0;
-           colorAdjust = 1;
-           
+            //check if no light elements are on
+            lightCheck = 0;
+            colorAdjust = 1;
     }
-
-
-      if(IsFlagSet(FLAG_ENABLE_LIGHTING_AMBIENT_AND_SPECULAR_AND_SHADER))
-    {
-        
-       
-            
-        
-           //this is just normal with a shader effect :)
-           colorAdjust = u_DeltaTime * 20;
-           //check if no light elements are on
-           lightCheck = 0;
-    }
-    
-     if(IsFlagSet(FLAG_ENABLE_LIGHTING_NONE))
-    {
-        
-            ambient *= 0; 
-           specular *= 0;
-           diffuse *=  0;
-
-           //check if no light elements are on
-           lightCheck = 1;
-           colorAdjust = 1;
-           
-    }
-    
-   
 
 	outColor = vec4(ColorCorrect(albedo * (ambient + diffuse + specular + vec3(lightCheck) + (emissive.rgb * emissive.a)) * colorAdjust), 1.0);
-
-
 }
