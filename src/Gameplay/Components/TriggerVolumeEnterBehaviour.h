@@ -3,6 +3,7 @@
 #include "Gameplay/Physics/TriggerVolume.h"
 #include "Gameplay/Components/RenderComponent.h"
 #include "Gameplay/Physics/TriggerVolume.h"
+#include "Gameplay/Components/PlayerController.h"
 
 /// <summary>
 /// Provides an example behaviour that uses some of the trigger interface to change the material
@@ -23,6 +24,8 @@ public:
 	virtual nlohmann::json ToJson() const override;
 	static TriggerVolumeEnterBehaviour::Sptr FromJson(const nlohmann::json& blob);
 	MAKE_TYPENAME(TriggerVolumeEnterBehaviour);
+
+	PlayerController::Sptr playerController;
 
 protected:
 	bool _playerInTrigger;

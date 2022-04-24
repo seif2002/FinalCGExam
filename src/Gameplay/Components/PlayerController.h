@@ -32,7 +32,8 @@ public:
 	MAKE_TYPENAME(PlayerController);
 	virtual nlohmann::json ToJson() const override;
 	static PlayerController::Sptr FromJson(const nlohmann::json& blob);
-
+	
+	void SetJump(bool state);
 protected:
 	glm::vec3 _jumpForce;
 	float _moveSpeed;

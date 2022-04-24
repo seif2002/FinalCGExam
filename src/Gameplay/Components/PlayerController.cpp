@@ -36,6 +36,13 @@ PlayerController::Sptr PlayerController::FromJson(const nlohmann::json & blob) {
 	return result;
 }
 
+
+void PlayerController::SetJump(bool state)
+{
+	_canJump = state;
+}
+
+
 void PlayerController::Update(float deltaTime) {
 
 	_body->ApplyForce(gravity);
@@ -43,20 +50,14 @@ void PlayerController::Update(float deltaTime) {
 	glm::vec3 currentVelocity = _body->GetLinearVelocity();
 
 
-	if (GetGameObject()->GetPosition().z < 0.6)
-	{
-		_canJump = true;
-	}
-	else
-	{
-		_canJump = false;
-	}
+	
 	if (InputEngine::GetKeyState(GLFW_KEY_SPACE) == ButtonState::Pressed && _canJump) {
 		_body->ApplyImpulse(_jumpForce);
 		Gameplay::IComponent::Sptr ptr = Panel.lock();
 		if (ptr != nullptr) {
 			ptr->IsEnabled = !ptr->IsEnabled;
 		}
+		_canJump = false;
 	}
 	if (InputEngine::GetKeyState(GLFW_KEY_D) == ButtonState::Down) {
 		if (currentVelocity.y >= -_moveSpeed)

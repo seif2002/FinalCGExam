@@ -367,7 +367,26 @@ void DefaultSceneLayer::_CreateScene()
 			// Make sure that the camera is set as the scene's main camera!
 			//scene->MainCamera = cam;
 		}
+		// Player object
+		GameObject::Sptr player = scene->CreateGameObject("Player");
+		{
+			MeshResource::Sptr box = ResourceManager::CreateAsset<MeshResource>();
+			box->AddParam(MeshBuilderParam::CreateCube(glm::vec3(0, 0, 0.1f), ONE));
+			box->GenerateMesh();
 
+			// Set and rotation position in the scene
+			player->SetPostion(glm::vec3(0.0f, 0.0f, 1.0f));
+
+			// Add a render component
+			RenderComponent::Sptr renderer = player->Add<RenderComponent>();
+			renderer->SetMesh(box);
+			renderer->SetMaterial(boxMaterial);
+
+			RigidBody::Sptr playerHitbox = player->Add<RigidBody>(RigidBodyType::Dynamic);
+			playerHitbox->AddCollider(BoxCollider::Create(glm::vec3(0.5f, 0.5f, 0.5f)))->SetPosition({ 0,0,0.110 });
+
+			PlayerController::Sptr playerController = player->Add<PlayerController>();
+		}
 
 		// Set up all our sample objects
 		GameObject::Sptr plane = scene->CreateGameObject("Plane");
@@ -385,28 +404,19 @@ void DefaultSceneLayer::_CreateScene()
 			// Attach a plane collider that extends infinitely along the X/Y axis
 			RigidBody::Sptr physics = plane->Add<RigidBody>(/*static by default*/);
 			physics->AddCollider(BoxCollider::Create(glm::vec3(50.0f, 50.0f, 1.0f)))->SetPosition({ 0,0,-1 });
+
+			TriggerVolume::Sptr trigger = plane->Add<TriggerVolume>();
+			BoxCollider::Sptr collider = BoxCollider::Create(glm::vec3(0.5f));
+			collider->SetPosition(glm::vec3(0.0f, 0.0f, 0.11f));
+			trigger->AddCollider(collider);
+
+			TriggerVolumeEnterBehaviour::Sptr volume = plane->Add<TriggerVolumeEnterBehaviour>();
+			volume->playerController = player->Get<PlayerController>();
+
+
 		}
 
-		// Player object
-		GameObject::Sptr player = scene->CreateGameObject("Player");
-		{
-			MeshResource::Sptr box = ResourceManager::CreateAsset<MeshResource>();
-			box->AddParam(MeshBuilderParam::CreateCube(glm::vec3(0, 0, 0.1f), ONE));
-			box->GenerateMesh();
-
-			// Set and rotation position in the scene
-			player->SetPostion(glm::vec3(0.0f, 0.0f, 1.0f));
-
-			// Add a render component
-			RenderComponent::Sptr renderer = player->Add<RenderComponent>();
-			renderer->SetMesh(box);
-			renderer->SetMaterial(boxMaterial);
-
-			RigidBody::Sptr playerHitbox = player->Add<RigidBody>(RigidBodyType::Dynamic);
-			playerHitbox->AddCollider(BoxCollider::Create(glm::vec3(1.0f, 1.0f, 1.0f)))->SetPosition({ 0,0,0.5 });
-
-			PlayerController::Sptr playerController = player->Add<PlayerController>();
-		}
+		
 
 		// Add some walls :3
 		{
@@ -439,26 +449,26 @@ void DefaultSceneLayer::_CreateScene()
 			plane->AddChild(wall4);
 		}
 
-		GameObject::Sptr monkey1 = scene->CreateGameObject("Monkey 1");
-		{
-			// Set position in the scene
-			monkey1->SetPostion(glm::vec3(1.5f, 0.0f, 1.0f));
+		//GameObject::Sptr monkey1 = scene->CreateGameObject("Monkey 1");
+		//{
+		//	// Set position in the scene
+		//	monkey1->SetPostion(glm::vec3(1.5f, 0.0f, 1.0f));
 
-			// Add some behaviour that relies on the physics body
-			monkey1->Add<JumpBehaviour>();
+		//	// Add some behaviour that relies on the physics body
+		//	monkey1->Add<JumpBehaviour>();
 
-			// Create and attach a renderer for the monkey
-			RenderComponent::Sptr renderer = monkey1->Add<RenderComponent>();
-			renderer->SetMesh(monkeyMesh);
-			renderer->SetMaterial(monkeyMaterial);
+		//	// Create and attach a renderer for the monkey
+		//	RenderComponent::Sptr renderer = monkey1->Add<RenderComponent>();
+		//	renderer->SetMesh(monkeyMesh);
+		//	renderer->SetMaterial(monkeyMaterial);
 
-			// Example of a trigger that interacts with static and kinematic bodies as well as dynamic bodies
-			TriggerVolume::Sptr trigger = monkey1->Add<TriggerVolume>();
-			trigger->SetFlags(TriggerTypeFlags::Statics | TriggerTypeFlags::Kinematics);
-			trigger->AddCollider(BoxCollider::Create(glm::vec3(1.0f)));
+		//	// Example of a trigger that interacts with static and kinematic bodies as well as dynamic bodies
+		//	TriggerVolume::Sptr trigger = monkey1->Add<TriggerVolume>();
+		//	trigger->SetFlags(TriggerTypeFlags::Statics | TriggerTypeFlags::Kinematics);
+		//	trigger->AddCollider(BoxCollider::Create(glm::vec3(1.0f)));
 
-			monkey1->Add<TriggerVolumeEnterBehaviour>();
-		}
+		//	monkey1->Add<TriggerVolumeEnterBehaviour>();
+		//}
 
 		GameObject::Sptr ship = scene->CreateGameObject("Fenrir");
 		{
