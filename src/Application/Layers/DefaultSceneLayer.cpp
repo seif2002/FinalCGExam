@@ -50,6 +50,7 @@
 #include "Gameplay/Components/TriggerVolumeEnterBehaviour.h"
 #include "Gameplay/Components/SimpleCameraControl.h"
 #include "Gameplay/Components/PlayerController.h"
+#include "Gameplay/Components/DebugKeyHandler.h"
 
 // Physics
 #include "Gameplay/Physics/RigidBody.h"
@@ -360,7 +361,7 @@ void DefaultSceneLayer::_CreateScene()
 			scene->MainCamera->SetFovDegrees(70.0f);
 
 			camera->Add<SimpleCameraControl>();
-
+			DebugKeyHandler::Sptr handler = camera->Add<DebugKeyHandler>();
 			// This is now handled by scene itself!
 			//Camera::Sptr cam = camera->Add<Camera>();
 			// Make sure that the camera is set as the scene's main camera!
