@@ -13,9 +13,9 @@ DebugKeyHandler::DebugKeyHandler() :
 	diffuse(true),
 	ambient(true),
 	specular(true),
-	post1(true),
-	post2(true),
-	post3(true)
+	post1(false),
+	post2(false),
+	post3(false)
 {}
 
 void DebugKeyHandler::Awake() {
@@ -29,12 +29,10 @@ void DebugKeyHandler::Update(float deltaTime) {
 	{
 		if (diffuse)
 		{
-			_renderer->GetMaterial()->Set("diffuse", false);
 			diffuse = false;
 		}
 		else
 		{
-			_renderer->GetMaterial()->Set("diffuse", true);
 			diffuse = true;
 		}
 	}

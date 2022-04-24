@@ -65,6 +65,14 @@ void PostProcessingLayer::OnAppLoad(const nlohmann::json & config)
 
 	VertexBuffer::Sptr vbo = std::make_shared<VertexBuffer>();
 	vbo->LoadData(positions, 6);
+	
+	PostProcessingLayer::Sptr& postProcess = Application::Get().GetLayer<PostProcessingLayer>();
+	postProcess->GetEffect<Pixelation>()->Enabled = false;
+	postProcess->GetEffect<ColorCorrectionEffect>()->Enabled = false;
+	postProcess->GetEffect<Filmgrain>()->Enabled = false;
+	postProcess->GetEffect<Toonshading>()->Enabled = false;
+	postProcess->GetEffect<Nightvision>()->Enabled = false;
+	postProcess->GetEffect<OutlineEffect>()->Enabled = false;
 
 	_quadVAO = VertexArrayObject::Create();
 	_quadVAO->AddVertexBuffer(vbo, {
