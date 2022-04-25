@@ -12,8 +12,14 @@ void RotatingBehaviour::Update(float deltaTime) {
 
 	if (GetGameObject()->GetPosition().y > 2.5 || GetGameObject()->GetPosition().y < -2.5)
 	{
-		MoveSpeed *= -1;
+		MoveSpeed *= glm::vec3(1,-1,1);
 	}
+
+	if (GetGameObject()->GetPosition().z > 4.25 || GetGameObject()->GetPosition().z < 3.75)
+	{
+		MoveSpeed *= glm::vec3(1, 1, -1);
+	}
+
 }
 
 void RotatingBehaviour::OnTriggerVolumeEntered(const std::shared_ptr<Gameplay::Physics::RigidBody>& body)

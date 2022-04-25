@@ -492,7 +492,7 @@ void DefaultSceneLayer::_CreateScene()
 
 			RotatingBehaviour::Sptr move = egg->Add<RotatingBehaviour>();
 			move->RotationSpeed = glm::vec3(0, 0, 180);
-			move->MoveSpeed = glm::vec3(0, 1, 0);
+			move->MoveSpeed = glm::vec3(0, 1, 0.25f);
 
 			TriggerVolume::Sptr trigger = egg->Add<TriggerVolume>();
 			SphereCollider::Sptr collider = SphereCollider::Create(0.5f);
@@ -609,7 +609,7 @@ void DefaultSceneLayer::_CreateScene()
 		GameObject::Sptr shadowCaster = scene->CreateGameObject("Shadow Light");
 		{
 			// Set position in the scene
-			shadowCaster->SetPostion(glm::vec3(3.0f, 3.0f, 5.0f));
+			shadowCaster->SetPostion(glm::vec3(0.0f, 0.01f, 15.0f));
 			shadowCaster->LookAt(glm::vec3(0.0f));
 
 			// Create and attach a renderer for the monkey
