@@ -156,6 +156,7 @@
     <ClInclude Include="src\Gameplay\Components\ShipMoveBehaviour.h" />
     <ClInclude Include="src\Gameplay\Components\SimpleCameraControl.h" />
     <ClInclude Include="src\Gameplay\Components\TriggerVolumeEnterBehaviour.h" />
+    <ClInclude Include="src\Gameplay\Components\WinBehaviour.h" />
     <ClInclude Include="src\Gameplay\GameObject.h" />
     <ClInclude Include="src\Gameplay\InputEngine.h" />
     <ClInclude Include="src\Gameplay\Material.h" />
@@ -257,6 +258,7 @@
     <ClCompile Include="src\Gameplay\Components\ShipMoveBehaviour.cpp" />
     <ClCompile Include="src\Gameplay\Components\SimpleCameraControl.cpp" />
     <ClCompile Include="src\Gameplay\Components\TriggerVolumeEnterBehaviour.cpp" />
+    <ClCompile Include="src\Gameplay\Components\WinBehaviour.cpp" />
     <ClCompile Include="src\Gameplay\GameObject.cpp" />
     <ClCompile Include="src\Gameplay\InputEngine.cpp" />
     <ClCompile Include="src\Gameplay\Material.cpp" />

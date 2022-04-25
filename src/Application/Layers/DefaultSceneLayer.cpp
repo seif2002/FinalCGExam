@@ -149,6 +149,12 @@ void DefaultSceneLayer::_CreateScene()
 		Texture2D::Sptr    boxSpec      = ResourceManager::CreateAsset<Texture2D>("textures/box-specular.png");
 		Texture2D::Sptr    monkeyTex    = ResourceManager::CreateAsset<Texture2D>("textures/monkey-uvMap.png");
 		Texture2D::Sptr    leafTex      = ResourceManager::CreateAsset<Texture2D>("textures/leaves.png");
+		Texture2D::Sptr    red			= ResourceManager::CreateAsset<Texture2D>("textures/red.png");
+		Texture2D::Sptr    yellow		= ResourceManager::CreateAsset<Texture2D>("textures/yellow.png");
+		Texture2D::Sptr    green		= ResourceManager::CreateAsset<Texture2D>("textures/green.png");
+		Texture2D::Sptr    cyan			= ResourceManager::CreateAsset<Texture2D>("textures/cyan.png");
+		Texture2D::Sptr    blue			= ResourceManager::CreateAsset<Texture2D>("textures/blue.png");
+		Texture2D::Sptr    magenta		= ResourceManager::CreateAsset<Texture2D>("textures/magenta.png");
 		leafTex->SetMinFilter(MinFilter::Nearest);
 		leafTex->SetMagFilter(MagFilter::Nearest);
 
@@ -222,62 +228,22 @@ void DefaultSceneLayer::_CreateScene()
 		}
 
 		// This will be the reflective material, we'll make the whole thing 90% reflective
-		Material::Sptr monkeyMaterial = ResourceManager::CreateAsset<Material>(deferredForward);
+		Material::Sptr playerMaterial = ResourceManager::CreateAsset<Material>(deferredForward);
 		{
-			monkeyMaterial->Name = "Monkey";
-			monkeyMaterial->Set("u_Material.AlbedoMap", monkeyTex);
-			monkeyMaterial->Set("u_Material.NormalMap", normalMapDefault);
-			monkeyMaterial->Set("u_Material.Shininess", 0.5f);
+			playerMaterial->Name = "Player";
+			playerMaterial->Set("u_Material.AlbedoMap", blue);
+			playerMaterial->Set("u_Material.NormalMap", normalMapDefault);
+			playerMaterial->Set("u_Material.Shininess", 0.8f);
 		}
 
 		// This will be the reflective material, we'll make the whole thing 50% reflective
-		Material::Sptr testMaterial = ResourceManager::CreateAsset<Material>(deferredForward); 
+		Material::Sptr groundMaterial = ResourceManager::CreateAsset<Material>(deferredForward); 
 		{
-			testMaterial->Name = "Box-Specular";
-			testMaterial->Set("u_Material.AlbedoMap", boxTexture); 
-			testMaterial->Set("u_Material.Specular", boxSpec);
-			testMaterial->Set("u_Material.NormalMap", normalMapDefault);
-		}
-
-		// Our foliage vertex shader material 
-		Material::Sptr foliageMaterial = ResourceManager::CreateAsset<Material>(foliageShader);
-		{
-			foliageMaterial->Name = "Foliage Shader";
-			foliageMaterial->Set("u_Material.AlbedoMap", leafTex);
-			foliageMaterial->Set("u_Material.Shininess", 0.1f);
-			foliageMaterial->Set("u_Material.DiscardThreshold", 0.1f);
-			foliageMaterial->Set("u_Material.NormalMap", normalMapDefault);
-
-			foliageMaterial->Set("u_WindDirection", glm::vec3(1.0f, 1.0f, 0.0f));
-			foliageMaterial->Set("u_WindStrength", 0.5f);
-			foliageMaterial->Set("u_VerticalScale", 1.0f);
-			foliageMaterial->Set("u_WindSpeed", 1.0f);
-		}
-
-		// Our toon shader material
-		Material::Sptr toonMaterial = ResourceManager::CreateAsset<Material>(celShader);
-		{
-			toonMaterial->Name = "Toon"; 
-			toonMaterial->Set("u_Material.AlbedoMap", boxTexture);
-			toonMaterial->Set("u_Material.NormalMap", normalMapDefault);
-			toonMaterial->Set("s_ToonTerm", toonLut);
-			toonMaterial->Set("u_Material.Shininess", 0.1f); 
-			toonMaterial->Set("u_Material.Steps", 8);
-		}
-
-
-		Material::Sptr displacementTest = ResourceManager::CreateAsset<Material>(displacementShader);
-		{
-			Texture2D::Sptr displacementMap = ResourceManager::CreateAsset<Texture2D>("textures/displacement_map.png");
-			Texture2D::Sptr normalMap       = ResourceManager::CreateAsset<Texture2D>("textures/normal_map.png");
-			Texture2D::Sptr diffuseMap      = ResourceManager::CreateAsset<Texture2D>("textures/bricks_diffuse.png");
-
-			displacementTest->Name = "Displacement Map";
-			displacementTest->Set("u_Material.AlbedoMap", diffuseMap);
-			displacementTest->Set("u_Material.NormalMap", normalMap);
-			displacementTest->Set("s_Heightmap", displacementMap);
-			displacementTest->Set("u_Material.Shininess", 0.5f);
-			displacementTest->Set("u_Scale", 0.1f);
+			groundMaterial->Name = "Ground";
+			groundMaterial->Set("u_Material.AlbedoMap", green);
+			groundMaterial->Set("u_Material.Specular", solidBlackTex);
+			groundMaterial->Set("u_Material.NormalMap", normalMapDefault);
+			playerMaterial->Set("u_Material.Shininess", 0.2f);
 		}
 
 		Material::Sptr grey = ResourceManager::CreateAsset<Material>(deferredForward);
@@ -382,7 +348,7 @@ void DefaultSceneLayer::_CreateScene()
 			// Add a render component
 			RenderComponent::Sptr renderer = player->Add<RenderComponent>();
 			renderer->SetMesh(box);
-			renderer->SetMaterial(boxMaterial);
+			renderer->SetMaterial(playerMaterial);
 
 			RigidBody::Sptr playerHitbox = player->Add<RigidBody>(RigidBodyType::Dynamic);
 			playerHitbox->AddCollider(BoxCollider::Create(glm::vec3(0.25f, 0.25f, 0.25f)))->SetPosition({ 0,0,0.110 });
@@ -420,7 +386,7 @@ void DefaultSceneLayer::_CreateScene()
 			// Create and attach a RenderComponent to the object to draw our mesh
 			RenderComponent::Sptr renderer = plane->Add<RenderComponent>();
 			renderer->SetMesh(tiledMesh);
-			renderer->SetMaterial(boxMaterial);
+			renderer->SetMaterial(groundMaterial);
 
 			// Attach a plane collider that extends infinitely along the X/Y axis
 			RigidBody::Sptr physics = plane->Add<RigidBody>(/*static by default*/);
@@ -464,7 +430,7 @@ void DefaultSceneLayer::_CreateScene()
 			wall->GenerateMesh();
 
 			GameObject::Sptr wall1 = scene->CreateGameObject("Wall1");
-			wall1->Add<RenderComponent>()->SetMesh(wall)->SetMaterial(whiteBrick);
+			wall1->Add<RenderComponent>()->SetMesh(wall)->SetMaterial(groundMaterial);
 			wall1->SetScale(glm::vec3(2.0f, 2.0f, 0.5f));
 			wall1->SetPostion(glm::vec3(0.0f, 4.5f, 1.5f));
 			
@@ -484,7 +450,7 @@ void DefaultSceneLayer::_CreateScene()
 
 
 			GameObject::Sptr wall2 = scene->CreateGameObject("Wall2");
-			wall2->Add<RenderComponent>()->SetMesh(wall)->SetMaterial(whiteBrick);
+			wall2->Add<RenderComponent>()->SetMesh(wall)->SetMaterial(groundMaterial);
 			wall2->SetScale(glm::vec3(2.0f, 2.0f, 0.5f));
 			wall2->SetPostion(glm::vec3(0.0f, -4.5f, 1.5f));
 
@@ -503,13 +469,13 @@ void DefaultSceneLayer::_CreateScene()
 			plane->AddChild(wall2);
 
 			GameObject::Sptr wall3 = scene->CreateGameObject("Wall3");
-			wall3->Add<RenderComponent>()->SetMesh(wall)->SetMaterial(whiteBrick);
+			wall3->Add<RenderComponent>()->SetMesh(wall)->SetMaterial(groundMaterial);
 			wall3->SetScale(glm::vec3(1.0f, 20.0f, 3.0f));
 			wall3->SetPostion(glm::vec3(10.0f, 0.0f, 1.5f));
 			plane->AddChild(wall3);
 
 			GameObject::Sptr wall4 = scene->CreateGameObject("Wall4");
-			wall4->Add<RenderComponent>()->SetMesh(wall)->SetMaterial(whiteBrick);
+			wall4->Add<RenderComponent>()->SetMesh(wall)->SetMaterial(groundMaterial);
 			wall4->SetScale(glm::vec3(1.0f, 20.0f, 3.0f));
 			wall4->SetPostion(glm::vec3(-10.0f, 0.0f, 1.5f));
 			plane->AddChild(wall4);
