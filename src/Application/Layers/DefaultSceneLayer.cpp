@@ -51,6 +51,7 @@
 #include "Gameplay/Components/SimpleCameraControl.h"
 #include "Gameplay/Components/PlayerController.h"
 #include "Gameplay/Components/DebugKeyHandler.h"
+#include "Gameplay/Components/WinBehaviour.h"
 
 // Physics
 #include "Gameplay/Physics/RigidBody.h"
@@ -513,7 +514,18 @@ void DefaultSceneLayer::_CreateScene()
 			egg->AddChild(ball);
 		}
 
+		GameObject::Sptr win = scene->CreateGameObject("Win");
+		{
+			win->SetPostion(glm::vec3(0.0f, -4.5f, 1.5f));
 
+			TriggerVolume::Sptr trigger = win->Add<TriggerVolume>();
+			BoxCollider::Sptr collider = BoxCollider::Create(glm::vec3(0.5f));
+			collider->SetPosition(glm::vec3(0.0f, 0.0f, 0.15f));
+			collider->SetScale(glm::vec3(2.0f, 2.0f, 0.2f));
+			trigger->AddCollider(collider);
+
+			WinBehaviour::Sptr winner = win->Add<WinBehaviour>();
+		}
 
 		GameObject::Sptr ship = scene->CreateGameObject("Fenrir");
 		{

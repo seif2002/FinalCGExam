@@ -48,6 +48,7 @@
 #include "Gameplay/Components/ShipMoveBehaviour.h"
 #include "Gameplay/Components/PlayerController.h"
 #include "Gameplay/Components/DebugKeyHandler.h"
+#include "Gameplay/Components/WinBehaviour.h"
 
 // GUI
 #include "Gameplay/Components/GUI/RectTransform.h"
@@ -283,6 +284,7 @@ void Application::_RegisterClasses()
 	ComponentManager::RegisterType<ShipMoveBehaviour>();
 	ComponentManager::RegisterType<PlayerController>();
 	ComponentManager::RegisterType<DebugKeyHandler>();
+	ComponentManager::RegisterType<WinBehaviour>();
 }
 
 void Application::_Load() {

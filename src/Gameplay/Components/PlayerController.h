@@ -9,6 +9,11 @@
 #include "Gameplay/Physics/TriggerVolume.h"
 #include "Graphics/DebugDraw.h"
 
+#include "Application/Layers/PostProcessingLayer.h"
+#include "Application/Application.h"
+#include "Application/Layers/PostProcessing/Nightvision.h"
+#include "Application/Layers/PostProcessing/Pixelation.h"
+
 /// <summary>
 /// A player controller which allows for key inputs to move an object in the scene
 /// Hopefully I can get this to interact nicely with collisions
@@ -34,6 +39,8 @@ public:
 	static PlayerController::Sptr FromJson(const nlohmann::json& blob);
 	
 	void SetJump(bool state);
+
+	PostProcessingLayer::Sptr& postProcess = Application::Get().GetLayer<PostProcessingLayer>();
 protected:
 	glm::vec3 _jumpForce;
 	float _moveSpeed;
