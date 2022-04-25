@@ -388,6 +388,25 @@ void DefaultSceneLayer::_CreateScene()
 			playerHitbox->AddCollider(BoxCollider::Create(glm::vec3(0.25f, 0.25f, 0.25f)))->SetPosition({ 0,0,0.110 });
 
 			PlayerController::Sptr playerController = player->Add<PlayerController>();
+
+			ParticleSystem::Sptr particleManager = player->Add<ParticleSystem>();
+			particleManager->Atlas = particleTex;
+
+			particleManager->_gravity = glm::vec3(0.0f);
+
+			ParticleSystem::ParticleData emitter;
+			emitter.Type = ParticleType::SphereEmitter;
+			emitter.TexID = 3;
+			emitter.Position = glm::vec3(0.0f, 0.0f, 0.0f);
+			emitter.Color = glm::vec4(0.235f, 0.235f, 1.0f, 0.7f);
+			emitter.Lifetime = 1.0f / 50.0f;
+			emitter.SphereEmitterData.Timer = 1.0f / 50.0f;
+			emitter.SphereEmitterData.Velocity = 0.2f;
+			emitter.SphereEmitterData.LifeRange = { 1.0f, 1.0f };
+			emitter.SphereEmitterData.Radius = 0.1f;
+			emitter.SphereEmitterData.SizeRange = { 0.5f, 0.5f };
+
+			particleManager->AddEmitter(emitter);
 		}
 		 
 		// Set up all our sample objects
@@ -416,7 +435,24 @@ void DefaultSceneLayer::_CreateScene()
 			TriggerVolumeEnterBehaviour::Sptr volume = plane->Add<TriggerVolumeEnterBehaviour>();
 			volume->playerController = player->Get<PlayerController>();
 
+			ParticleSystem::Sptr particleManager = plane->Add<ParticleSystem>();
+			particleManager->Atlas = particleTex;
 
+			particleManager->_gravity = glm::vec3(0.0f, 0.0f, 0.5f);
+
+			ParticleSystem::ParticleData emitter;
+			emitter.Type = ParticleType::BoxEmitter;
+			emitter.TexID = 1;
+			emitter.Position = glm::vec3(3.0f, 0.0f, 0.0f);
+			emitter.Color = glm::vec4(0.789f, 0.239f, 0.162f, 0.718f);
+			emitter.Lifetime = 1.0f / 50.0f;
+			emitter.BoxEmitterData.Timer = 1.0f / 5.0f;
+			emitter.BoxEmitterData.LifeRange = { 5.0f, 10.0f };
+			emitter.BoxEmitterData.SizeRange = { 0.15f,0.3f };
+			emitter.BoxEmitterData.Velocity = glm::vec3(0.0f,0.0f, 3.0f);
+			emitter.BoxEmitterData.HalfExtents = glm::vec3(1.0f, 6.0f, 0.05f);
+
+			particleManager->AddEmitter(emitter);
 		}
 
 		
@@ -500,6 +536,25 @@ void DefaultSceneLayer::_CreateScene()
 			SphereCollider::Sptr collider2 = SphereCollider::Create(0.45f);
 			collider2->SetPosition(glm::vec3(0.0f, 0.0f, -3));
 			trigger->AddCollider(collider2);
+
+			ParticleSystem::Sptr particleManager = egg->Add<ParticleSystem>();
+			particleManager->Atlas = particleTex;
+
+			particleManager->_gravity = glm::vec3(0.0f, 0.0f, 0.3f);
+
+			ParticleSystem::ParticleData emitter;
+			emitter.Type = ParticleType::SphereEmitter;
+			emitter.TexID = 2;
+			emitter.Position = glm::vec3(0.0f, 0.0f, -0.3f);
+			emitter.Color = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+			emitter.Lifetime = 1.0f / 50.0f;
+			emitter.SphereEmitterData.Timer = 1.0f / 50.0f;
+			emitter.SphereEmitterData.Velocity = 0.5f;
+			emitter.SphereEmitterData.LifeRange = { 1.0f, 3.0f };
+			emitter.SphereEmitterData.Radius = 0.1f;
+			emitter.SphereEmitterData.SizeRange = { 0.1f, 0.5f };
+
+			particleManager->AddEmitter(emitter);
 		}
 
 		GameObject::Sptr ball = scene->CreateGameObject("Ball");
@@ -510,6 +565,8 @@ void DefaultSceneLayer::_CreateScene()
 			RenderComponent::Sptr renderer = ball ->Add<RenderComponent>();
 			renderer->SetMesh(sphere);
 			renderer->SetMaterial(grey);
+
+
 
 			egg->AddChild(ball);
 		}
@@ -527,58 +584,58 @@ void DefaultSceneLayer::_CreateScene()
 			WinBehaviour::Sptr winner = win->Add<WinBehaviour>();
 		}
 
-		GameObject::Sptr ship = scene->CreateGameObject("Fenrir");
-		{
-			// Set position in the scene
-			ship->SetPostion(glm::vec3(1.5f, 0.0f, 4.0f));
-			ship->SetScale(glm::vec3(0.1f));
+		//GameObject::Sptr ship = scene->CreateGameObject("Fenrir");
+		//{
+		//	// Set position in the scene
+		//	ship->SetPostion(glm::vec3(1.5f, 0.0f, 4.0f));
+		//	ship->SetScale(glm::vec3(0.1f));
 
-			// Create and attach a renderer for the monkey
-			RenderComponent::Sptr renderer = ship->Add<RenderComponent>();
-			renderer->SetMesh(shipMesh);
-			renderer->SetMaterial(grey);
+		//	// Create and attach a renderer for the monkey
+		//	RenderComponent::Sptr renderer = ship->Add<RenderComponent>();
+		//	renderer->SetMesh(shipMesh);
+		//	renderer->SetMaterial(grey);
 
-			GameObject::Sptr particles = scene->CreateGameObject("Particles");
-			ship->AddChild(particles);
-			particles->SetPostion({ 0.0f, -7.0f, 0.0f});
+		//	GameObject::Sptr particles = scene->CreateGameObject("Particles");
+		//	ship->AddChild(particles);
+		//	particles->SetPostion({ 0.0f, -7.0f, 0.0f});
 
-			ParticleSystem::Sptr particleManager = particles->Add<ParticleSystem>();
-			particleManager->Atlas = particleTex;
+		//	ParticleSystem::Sptr particleManager = particles->Add<ParticleSystem>();
+		//	particleManager->Atlas = particleTex;
 
-			particleManager->_gravity = glm::vec3(0.0f);
+		//	particleManager->_gravity = glm::vec3(0.0f);
 
-			ParticleSystem::ParticleData emitter;
-			emitter.Type = ParticleType::SphereEmitter;
-			emitter.TexID = 2;
-			emitter.Position = glm::vec3(0.0f);
-			emitter.Color = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
-			emitter.Lifetime = 1.0f / 50.0f;
-			emitter.SphereEmitterData.Timer = 1.0f / 50.0f;
-			emitter.SphereEmitterData.Velocity = 0.5f;
-			emitter.SphereEmitterData.LifeRange = { 1.0f, 3.0f };
-			emitter.SphereEmitterData.Radius = 0.5f;
-			emitter.SphereEmitterData.SizeRange = { 0.5f, 1.0f };
+		//	ParticleSystem::ParticleData emitter;
+		//	emitter.Type = ParticleType::SphereEmitter;
+		//	emitter.TexID = 2;
+		//	emitter.Position = glm::vec3(0.0f);
+		//	emitter.Color = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+		//	emitter.Lifetime = 1.0f / 50.0f;
+		//	emitter.SphereEmitterData.Timer = 1.0f / 50.0f;
+		//	emitter.SphereEmitterData.Velocity = 0.5f;
+		//	emitter.SphereEmitterData.LifeRange = { 1.0f, 3.0f };
+		//	emitter.SphereEmitterData.Radius = 0.5f;
+		//	emitter.SphereEmitterData.SizeRange = { 0.5f, 1.0f };
 
-			ParticleSystem::ParticleData emitter2;
-			emitter2.Type = ParticleType::SphereEmitter;
-			emitter2.TexID = 2;
-			emitter2.Position = glm::vec3(0.0f);
-			emitter2.Color = glm::vec4(1.0f, 0.5f, 0.0f, 1.0f);
-			emitter2.Lifetime = 1.0f / 40.0f;
-			emitter2.SphereEmitterData.Timer = 1.0f / 40.0f;
-			emitter2.SphereEmitterData.Velocity = 0.1f;
-			emitter2.SphereEmitterData.LifeRange = { 0.5f, 1.0f };
-			emitter2.SphereEmitterData.Radius = 0.25f;
-			emitter2.SphereEmitterData.SizeRange = { 0.25f, 0.5f };
+		//	ParticleSystem::ParticleData emitter2;
+		//	emitter2.Type = ParticleType::SphereEmitter;
+		//	emitter2.TexID = 2;
+		//	emitter2.Position = glm::vec3(0.0f);
+		//	emitter2.Color = glm::vec4(1.0f, 0.5f, 0.0f, 1.0f);
+		//	emitter2.Lifetime = 1.0f / 40.0f;
+		//	emitter2.SphereEmitterData.Timer = 1.0f / 40.0f;
+		//	emitter2.SphereEmitterData.Velocity = 0.1f;
+		//	emitter2.SphereEmitterData.LifeRange = { 0.5f, 1.0f };
+		//	emitter2.SphereEmitterData.Radius = 0.25f;
+		//	emitter2.SphereEmitterData.SizeRange = { 0.25f, 0.5f };
 
-			particleManager->AddEmitter(emitter);
-			particleManager->AddEmitter(emitter2);
+		//	particleManager->AddEmitter(emitter);
+		//	particleManager->AddEmitter(emitter2);
 
-			ShipMoveBehaviour::Sptr move = ship->Add<ShipMoveBehaviour>();
-			move->Center = glm::vec3(0.0f, 0.0f, 4.0f);
-			move->Speed = 180.0f;
-			move->Radius = 6.0f;
-		}
+		//	ShipMoveBehaviour::Sptr move = ship->Add<ShipMoveBehaviour>();
+		//	move->Center = glm::vec3(0.0f, 0.0f, 4.0f);
+		//	move->Speed = 180.0f;
+		//	move->Radius = 6.0f;
+		//}
 
 		GameObject::Sptr demoBase = scene->CreateGameObject("Demo Parent");
 		
